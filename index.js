@@ -26,8 +26,8 @@ wisp.options.allow_loopback_ips = true;
 wisp.options.allow_private_ips = true;
 
 const generalLimiter = rateLimit({
-  windowMs: 60 * 1000, 
-  max: 100,            
+  windowMs: 60 * 1000,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: "Too many requests, please try again later.",
