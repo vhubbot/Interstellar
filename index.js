@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import basicAuth from "express-basic-auth";
+import rateLimit from "express-rate-limit";
 import mime from "mime";
 import config from "./config.js";
 
@@ -24,6 +25,22 @@ const PORT = process.env.PORT || 8080;
 wisp.options.allow_loopback_ips = true;
 wisp.options.allow_private_ips = true;
 
+const generalLimiter = rateLimit({
+  windowMs: 60 * 1000, 
+  max: 100,            
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Too many requests, please try again later.",
+});
+
+const ghGamesLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 50,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Too many requests, please try again later.",
+});
+
 if (config.challenge !== false) {
   console.log(chalk.green("🔒 Password protection is enabled! Listing logins below"));
   Object.entries(config.users).forEach(([username, password]) => {
@@ -39,7 +56,7 @@ const ghGamesBases = {
 };
 const noMimeExts = new Set([".unityweb"]);
 
-app.get("/gh-games/*", async (req, res, next) => {
+app.get("/gh-games/*", ghGamesLimiter, async (req, res, next) => {
   try {
     let reqTarget;
     for (const [prefix, baseUrl] of Object.entries(ghGamesBases)) {
@@ -66,7 +83,6 @@ app.get("/gh-games/*", async (req, res, next) => {
     const data = Buffer.from(await asset.arrayBuffer());
     const ext = path.extname(reqTarget);
     const contentType = noMimeExts.has(ext) ? "application/octet-stream" : mime.getType(ext);
-
 
     const etag = asset.headers.get("etag");
     const lastModified = asset.headers.get("last-modified");
@@ -114,16 +130,16 @@ const routes = [
 ];
 
 routes.forEach(route => {
-  app.get(route.path, (_req, res) => {
+  app.get(route.path, generalLimiter, (_req, res) => {
     res.sendFile(path.join(__dirname, "static", route.file));
   });
 });
 
-app.use((req, res, next) => {
+app.use(generalLimiter, (req, res) => {
   res.status(404).sendFile(path.join(__dirname, "static", "404.html"));
 });
 
-app.use((err, req, res, next) => {
+app.use(generalLimiter, (err, req, res, next) => {
   console.error(err.stack);
   res.status(500).sendFile(path.join(__dirname, "static", "404.html"));
 });
