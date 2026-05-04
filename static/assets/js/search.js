@@ -1,8 +1,53 @@
-window.addEventListener("load", () => {
-  navigator.serviceWorker.register("../sw.js", {
-    scope: "/uv/",
-  });
+
+let swReady = false;
+let swReadyResolve;
+const swReadyPromise = new Promise(resolve => { swReadyResolve = resolve; });
+
+window.addEventListener("load", async () => {
+  if (!("serviceWorker" in navigator)) {
+    swReady = true;
+    swReadyResolve();
+    return;
+  }
+
+  try {
+    const registration = await navigator.serviceWorker.register("../sw.js", {
+      scope: "/uv/",
+    });
+
+    if (registration.active) {
+      swReady = true;
+      swReadyResolve();
+      return;
+    }
+
+    const worker = registration.installing || registration.waiting;
+    if (worker) {
+      worker.addEventListener("statechange", function onStateChange() {
+        if (this.state === "activated") {
+          swReady = true;
+          swReadyResolve();
+          worker.removeEventListener("statechange", onStateChange);
+        }
+      });
+    } else {
+      swReady = true;
+      swReadyResolve();
+    }
+  } catch (err) {
+    console.error("[SW] registration failed:", err);
+    swReady = true;
+    swReadyResolve();
+  }
 });
+
+async function waitForServiceWorker() {
+  if (swReady) return;
+  await Promise.race([
+    swReadyPromise,
+    new Promise(resolve => setTimeout(resolve, 4000)),
+  ]);
+}
 
 const form = document.getElementById("fv");
 const input = document.getElementById("input");
@@ -39,6 +84,8 @@ async function encodeUrl(url, proxyOverride) {
 }
 
 async function navigate(value, path, proxyOverride) {
+  await waitForServiceWorker();
+
   let url = value.trim();
   const engine = localStorage.getItem("engine");
   const searchUrl = engine ? engine : "https://search.brave.com/search?q=";
