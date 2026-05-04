@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
 import bareMuxNode from "@mercuryworkshop/bare-mux/node";
@@ -10,7 +9,6 @@ import cors from "cors";
 import express from "express";
 import basicAuth from "express-basic-auth";
 import mime from "mime";
-import fetch from "node-fetch";
 import config from "./config.js";
 
 console.log(chalk.yellow("🚀 Starting server..."));
@@ -22,68 +20,67 @@ const bareServer = createBareServer("/bare/");
 const { baremuxPath } = bareMuxNode;
 const epoxyDistPath = path.join(__dirname, "node_modules", "@mercuryworkshop", "epoxy-transport", "dist");
 const PORT = process.env.PORT || 8080;
-const cache = new Map();
-const CACHE_TTL = 30 * 24 * 60 * 60 * 1000; // Cache for 30 Days
 
 wisp.options.allow_loopback_ips = true;
 wisp.options.allow_private_ips = true;
 
 if (config.challenge !== false) {
   console.log(chalk.green("🔒 Password protection is enabled! Listing logins below"));
-  // biome-ignore lint: idk
   Object.entries(config.users).forEach(([username, password]) => {
     console.log(chalk.blue(`Username: ${username}, Password: ${password}`));
   });
   app.use(basicAuth({ users: config.users, challenge: true }));
 }
 
+const ghGamesBases = {
+  "/gh-games/1/": "https://raw.githubusercontent.com/qrs/x/fixy/",
+  "/gh-games/2/": "https://raw.githubusercontent.com/3v1/V5-Assets/main/",
+  "/gh-games/3/": "https://raw.githubusercontent.com/3v1/V5-Retro/master/",
+};
+const noMimeExts = new Set([".unityweb"]);
+
 app.get("/gh-games/*", async (req, res, next) => {
   try {
-    if (cache.has(req.path)) {
-      const { data, contentType, timestamp } = cache.get(req.path);
-      if (Date.now() - timestamp > CACHE_TTL) {
-        cache.delete(req.path);
-      } else {
-        res.writeHead(200, { "Content-Type": contentType });
-        return res.end(data);
-      }
-    }
-
-    const baseUrls = {
-      "/gh-games/1/": "https://raw.githubusercontent.com/qrs/x/fixy/",
-      "/gh-games/2/": "https://raw.githubusercontent.com/3v1/V5-Assets/main/",
-      "/gh-games/3/": "https://raw.githubusercontent.com/3v1/V5-Retro/master/",
-    };
-
     let reqTarget;
-    for (const [prefix, baseUrl] of Object.entries(baseUrls)) {
+    for (const [prefix, baseUrl] of Object.entries(ghGamesBases)) {
       if (req.path.startsWith(prefix)) {
         reqTarget = baseUrl + req.path.slice(prefix.length);
         break;
       }
     }
+    if (!reqTarget) return next();
 
-    if (!reqTarget) {
-      return next();
+    const upstreamHeaders = {};
+    if (req.headers["if-none-match"]) {
+      upstreamHeaders["If-None-Match"] = req.headers["if-none-match"];
     }
 
-    const asset = await fetch(reqTarget);
-    if (!asset.ok) {
-      return next();
+    const asset = await fetch(reqTarget, { headers: upstreamHeaders });
+
+    if (asset.status === 304) {
+      return res.sendStatus(304);
     }
+
+    if (!asset.ok) return next();
 
     const data = Buffer.from(await asset.arrayBuffer());
     const ext = path.extname(reqTarget);
-    const no = [".unityweb"];
-    const contentType = no.includes(ext) ? "application/octet-stream" : mime.getType(ext);
+    const contentType = noMimeExts.has(ext) ? "application/octet-stream" : mime.getType(ext);
 
-    cache.set(req.path, { data, contentType, timestamp: Date.now() });
-    res.writeHead(200, { "Content-Type": contentType });
+
+    const etag = asset.headers.get("etag");
+    const lastModified = asset.headers.get("last-modified");
+
+    res.writeHead(200, {
+      "Content-Type": contentType,
+      "Cache-Control": "public, max-age=31536000, immutable",
+      ...(etag && { ETag: etag }),
+      ...(lastModified && { "Last-Modified": lastModified }),
+    });
     res.end(data);
   } catch (error) {
     console.error("Error fetching asset:", error);
-    res.setHeader("Content-Type", "text/html");
-    res.status(500).send("Error fetching the asset");
+    res.status(500).type("text/html").send("Error fetching the asset");
   }
 });
 
@@ -116,7 +113,6 @@ const routes = [
   { path: "/", file: "index.html" },
 ];
 
-// biome-ignore lint: idk
 routes.forEach(route => {
   app.get(route.path, (_req, res) => {
     res.sendFile(path.join(__dirname, "static", route.file));
