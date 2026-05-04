@@ -23,6 +23,26 @@
       document.head.appendChild(customThemeStyle);
     }
   }
+
+  const PROXY_KEY = "proxy";
+  const ALLOWED = ["uv", "sj", "dy"];
+  const DEFAULT = "uv";
+
+  function initProxy() {
+    const current = localStorage.getItem(PROXY_KEY);
+    if (current === null) {
+      localStorage.setItem(PROXY_KEY, DEFAULT);
+      return DEFAULT;
+    }
+    if (ALLOWED.includes(current)) {
+      return current;
+    }
+    localStorage.setItem(PROXY_KEY, DEFAULT);
+    return DEFAULT;
+  }
+
+  window.resolveProxyChoice = initProxy;
+  window.resolveProxyChoice();
 })();
 
 let isInTabMode;
