@@ -37,6 +37,20 @@ try {
   }
 }
 
+function sanitizeUrl(url) {
+  if (!url || typeof url !== "string") return null;
+  try {
+    const parsed = new URL(url);
+    if (["http:", "https:", "data:"].includes(parsed.protocol)) {
+      return url;
+    }
+    return null;
+  } catch {
+    if (!url.includes(":")) return url;
+    return null;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const blockedHostnames = ["gointerstellar.app"];
 
@@ -73,7 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const cloakName = localStorage.getItem("CustomName") || localStorage.getItem("name");
   const cloakIcon = localStorage.getItem("CustomIcon") || localStorage.getItem("icon");
   if (cloakName) title.textContent = cloakName;
-  if (cloakIcon) icon.setAttribute("href", cloakIcon);
+  if (cloakIcon) {
+    const safeIcon = sanitizeUrl(cloakIcon);
+    if (safeIcon) icon.setAttribute("href", safeIcon);
+  }
 
   // Event Key Logic
   const eventKey = JSON.parse(localStorage.getItem("eventKey")) || ["`"];
@@ -84,7 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
     pressedKeys.push(event.key);
     const recentKeys = pressedKeys.slice(-eventKey.length);
     if (recentKeys.length === eventKey.length && eventKey.every((key, i) => key === recentKeys[i])) {
-      window.location.href = pLink;
+      const safeLink = sanitizeUrl(pLink);
+      if (safeLink) window.location.href = safeLink;
       pressedKeys = [];
     }
   });
