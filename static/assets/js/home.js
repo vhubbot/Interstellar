@@ -48,85 +48,96 @@ if (!inFrame && !navigator.userAgent.includes("Firefox") && localStorage.getItem
     }
   }, 2000);
 }
-// Particles
-document.addEventListener("DOMContentLoaded", event => {
-  if (window.localStorage.getItem("particles") === "true") {
-    const particlesConfig = {
-      particles: {
-        number: {
-          value: 200,
-          density: {
-            enable: true,
-            value_area: 800,
-          },
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("particles") !== "true") return;
+
+  const main = document.querySelector(".main");
+  const particlesDiv = document.createElement("div");
+  particlesDiv.id = "particles-js";
+  main.parentNode.insertBefore(particlesDiv, main);
+  particlesDiv.appendChild(main);
+
+  const particlesConfig = {
+    particles: {
+      number: {
+        value: 200,
+        density: {
+          enable: true,
+          value_area: 800,
         },
-        color: {
-          value: "#ffffff",
+      },
+      color: {
+        value: "#ffffff",
+      },
+      shape: {
+        type: "star",
+        stroke: {
+          width: 0,
+          color: "#ffffff",
         },
-        shape: {
-          type: "star",
-          stroke: {
-            width: 0,
-            color: "#ffffff",
-          },
-          polygon: {
-            nb_sides: 5,
-          },
+        polygon: {
+          nb_sides: 5,
         },
-        opacity: {
-          value: 1,
-          random: true,
-          anim: {
-            enable: true,
-            speed: 0.9,
-            opacity_min: 0,
-            sync: false,
-          },
+      },
+      opacity: {
+        value: 1,
+        random: true,
+        anim: {
+          enable: true,
+          speed: 0.9,
+          opacity_min: 0,
+          sync: false,
         },
-        size: {
-          value: 4,
-          random: true,
-          anim: {
-            enable: true,
-            speed: 1.1,
-            size_min: 0.1,
-            sync: false,
-          },
+      },
+      size: {
+        value: 4,
+        random: true,
+        anim: {
+          enable: true,
+          speed: 1.1,
+          size_min: 0.1,
+          sync: false,
         },
-        line_linked: {
+      },
+      line_linked: {
+        enable: false,
+      },
+      move: {
+        enable: true,
+        speed: 4,
+        direction: "none",
+        random: true,
+        straight: true,
+        out_mode: "out",
+        bounce: false,
+        variations: true,
+      },
+    },
+    interactivity: {
+      detect_on: "window",
+      events: {
+        onhover: {
           enable: false,
         },
-        move: {
-          enable: true,
-          speed: 4,
-          direction: "none",
-          random: true,
-          straight: true,
-          out_mode: "out",
-          bounce: false,
-          variations: true,
+        onclick: {
+          enable: false,
+          mode: "push",
+        },
+        resize: true,
+      },
+      modes: {
+        push: {
+          particles_nb: 30,
         },
       },
-      interactivity: {
-        detect_on: "window",
-        events: {
-          onhover: {
-            enable: false,
-          },
-          onclick: {
-            enable: false,
-            mode: "push",
-          },
-          resize: true,
-        },
-        modes: {
-          push: {
-            particles_nb: 30,
-          },
-        },
-      },
-      retina_detect: true,
-    };
+    },
+    retina_detect: true,
+  };
+
+  const script = document.createElement("script");
+  script.src = "/assets/js/particles.min.js";
+  script.onload = () => {
     particlesJS("particles-js", particlesConfig);
 
     window.addEventListener("click", e => {
@@ -137,12 +148,13 @@ document.addEventListener("DOMContentLoaded", event => {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       for (let i = 0; i < 30; i++) {
-        pJS.fn.vendors.destroypJS;
         pJS.fn.modes.pushParticles(1, { pos_x: x, pos_y: y });
       }
     });
-  }
+  };
+  document.head.appendChild(script);
 });
+
 // Splash texts
 const SplashT = [
   "Over 8 Million Users since 2023",
@@ -166,8 +178,8 @@ function US() {
 }
 
 SplashE.innerText = SplashT[SplashI];
-
 SplashE.addEventListener("click", US);
+
 // Random URL
 function getRandomUrl() {
   const randomUrls = [
