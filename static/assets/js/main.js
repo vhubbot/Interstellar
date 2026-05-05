@@ -136,4 +136,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (savedBackgroundImage) {
     document.body.style.backgroundImage = `url('${savedBackgroundImage}')`;
   }
+
+  // CSS Parallax Pixel Stars - based on codepen.io/sarazond/pen/LYGbwj
+  if (localStorage.getItem("particles") === "true") {
+    ["stars", "stars2", "stars3"].forEach(id => {
+      if (!document.getElementById(id)) {
+        const el = document.createElement("div");
+        el.id = id;
+        document.body.insertBefore(el, document.body.firstChild);
+      }
+    });
+  }
 });
