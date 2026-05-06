@@ -329,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!document.getElementById("pointer-canvas")) {
       const cursorDot = document.createElement("div");
       cursorDot.id = "rainbow-trail-cursor";
+      cursorDot.style.visibility = "hidden";
       document.body.appendChild(cursorDot);
       document.body.classList.add("rainbow-trail-cursor");
 
@@ -342,8 +343,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let W = canvas.width;
       let H = canvas.height;
-      let mx = W / 2;
-      let my = H / 2;
+      let mx = null;
+      let my = null;
       let clicking = false;
       let hue = 0;
       const particles = [];
@@ -358,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
         my = e.clientY;
         cursorDot.style.left = mx + "px";
         cursorDot.style.top = my + "px";
+        cursorDot.style.visibility = "visible";
       });
 
       window.addEventListener("mousedown", () => (clicking = true));
@@ -429,6 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       function spawnTrail() {
+        if (mx === null || my === null) return;
         const count = clicking ? 6 : 2;
         for (let i = 0; i < count; i++) {
           particles.push(new RainbowTrailParticle(mx, my, clicking));
