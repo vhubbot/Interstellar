@@ -550,5 +550,194 @@ document.addEventListener("DOMContentLoaded", () => {
         requestAnimationFrame(animateGlow);
       })();
     }
+  } else if (localStorage.getItem("pointer") === "the-sims") {
+    // The Sims Cursor (based on codepen.io/Margarita-the-solid/pen/LERbOMR)
+    if (!document.getElementById("the-sims-cursor")) {
+      document.body.classList.add("the-sims-cursor");
+
+      const NS = "http://www.w3.org/2000/svg";
+      const cursorSvg = document.createElementNS(NS, "svg");
+      cursorSvg.id = "the-sims-cursor";
+      cursorSvg.setAttribute("viewBox", "-110 -160 220 310");
+      cursorSvg.setAttribute("width", "44");
+      cursorSvg.setAttribute("height", "62");
+      cursorSvg.setAttribute("overflow", "visible");
+      document.body.appendChild(cursorSvg);
+
+      const halo1 = document.createElement("div");
+      halo1.className = "sims-halo";
+      halo1.style.cssText = "width:40px;height:40px;border:1.5px solid hsla(110,100%,60%,0.26);";
+      document.body.appendChild(halo1);
+
+      const halo2 = document.createElement("div");
+      halo2.className = "sims-halo";
+      halo2.style.cssText = "width:56px;height:56px;border:1px solid hsla(110,100%,60%,0.1);animation-delay:0.7s;";
+      document.body.appendChild(halo2);
+
+      const SCL = 98;
+      const V = [
+        [0, -1.85, 0],
+        [0, 1.85, 0],
+        [1, 0, 0],
+        [0, 0, 1],
+        [-1, 0, 0],
+        [0, 0, -1],
+      ];
+      const FACES = [
+        [0, 2, 3, 0.68],
+        [0, 3, 4, 0.9],
+        [0, 4, 5, 0.28],
+        [0, 5, 2, 0.14],
+        [1, 3, 2, 0.82],
+        [1, 4, 3, 0.34],
+        [1, 5, 4, 0.16],
+        [1, 2, 5, 0.1],
+      ];
+
+      const polys = FACES.map(() => {
+        const p = document.createElementNS(NS, "polygon");
+        p.setAttribute("stroke-linejoin", "round");
+        cursorSvg.appendChild(p);
+        return p;
+      });
+
+      const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+      const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+      const cross3 = ([ax, ay, az], [bx, by, bz]) => [ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx];
+      const norm3 = v => {
+        const l = Math.hypot(...v) || 1;
+        return v.map(x => x / l);
+      };
+      const rotY = ([x, y, z], c, s) => [x * c + z * s, y, -x * s + z * c];
+
+      function projectV(v, c, s) {
+        const [rx, ry, rz] = rotY(v, c, s);
+        const fov = 7 / (7 - rz);
+        return { x: rx * SCL * fov, y: ry * SCL * fov, z: rz };
+      }
+
+      const LIGHT = norm3([-0.3, -0.55, 1.0]);
+      let glowHue = 110;
+
+      function renderPlumbob(ts) {
+        const t = ts * 0.001;
+        const ry = t * 0.5;
+        const c = Math.cos(ry),
+          s = Math.sin(ry);
+        glowHue = 108 + Math.sin(t * 0.14) * 13;
+
+        const gl = 54 + Math.sin(t * 2.7) * 9;
+        const gr = 15 + Math.sin(t * 2.7) * 6;
+        cursorSvg.style.filter = `drop-shadow(0 0 ${gr}px hsl(${glowHue},100%,${gl}%)) ` + `drop-shadow(0 0 ${(gr * 2.8).toFixed(0)}px hsla(${glowHue},100%,${gl - 12}%,.38))`;
+
+        const proj = V.map(v => projectV(v, c, s));
+
+        const faceData = FACES.map((face, i) => {
+          const [vi0, vi1, vi2, baseLum] = face;
+          const rv0 = rotY(V[vi0], c, s);
+          const rv1 = rotY(V[vi1], c, s);
+          const rv2 = rotY(V[vi2], c, s);
+          const normal = norm3(
+            cross3(
+              rv1.map((v, j) => v - rv0[j]),
+              rv2.map((v, j) => v - rv0[j]),
+            ),
+          );
+          const facing = normal[2] > 0.005;
+          const diffuse = clamp(dot3(normal, LIGHT), 0, 1);
+          const lit = baseLum * 0.65 + diffuse * 0.25 + 0.1;
+          const L = clamp(lit * 82, 10, 91);
+          const fh = glowHue + (vi0 === 1 ? -9 : 0);
+          const p0 = proj[vi0],
+            p1 = proj[vi1],
+            p2 = proj[vi2];
+          const fmt = n => n.toFixed(1);
+          return {
+            i,
+            facing,
+            pts: `${fmt(p0.x)},${fmt(p0.y)} ${fmt(p1.x)},${fmt(p1.y)} ${fmt(p2.x)},${fmt(p2.y)}`,
+            fill: `hsl(${fh.toFixed(1)},65%,${L.toFixed(1)}%)`,
+            strokeA: (0.08 + (1 - L / 91) * 0.14).toFixed(2),
+            z: (p0.z + p1.z + p2.z) / 3,
+          };
+        });
+
+        faceData
+          .filter(f => !f.facing)
+          .forEach(fd => {
+            polys[fd.i].setAttribute("fill", "none");
+            polys[fd.i].setAttribute("stroke", "none");
+            cursorSvg.insertBefore(polys[fd.i], cursorSvg.firstChild);
+          });
+        faceData
+          .filter(f => f.facing)
+          .sort((a, b) => b.z - a.z)
+          .forEach(fd => {
+            const p = polys[fd.i];
+            p.setAttribute("points", fd.pts);
+            p.setAttribute("fill", fd.fill);
+            p.setAttribute("stroke", `hsla(0,0%,0%,${fd.strokeA})`);
+            p.setAttribute("stroke-width", "1.2");
+            cursorSvg.appendChild(p);
+          });
+
+        [halo1, halo2].forEach((h, i) => {
+          h.style.border = `${i === 0 ? 1.5 : 1}px solid hsla(${glowHue},100%,60%,${i === 0 ? 0.26 : 0.1})`;
+        });
+
+        requestAnimationFrame(renderPlumbob);
+      }
+      requestAnimationFrame(renderPlumbob);
+
+      const COLS = ["#39FF14", "#a8ff78", "#00D4FF", "#FFE600", "#9B5DE5"];
+
+      function spawnSimsPt(x, y, size = 1) {
+        const el = document.createElement("div");
+        el.className = "sims-pt";
+        el.textContent = Math.random() < 0.7 ? "§" : "✦";
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        el.style.color = COLS[Math.floor(Math.random() * COLS.length)];
+        el.style.fontSize = size + "rem";
+        const d = 0.8 + Math.random() * 1.2;
+        el.style.setProperty("--d", d + "s");
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), (d + 0.2) * 1000);
+      }
+
+      const simsInterval = setInterval(() => {
+        if (localStorage.getItem("pointer") !== "the-sims") {
+          clearInterval(simsInterval);
+          return;
+        }
+        spawnSimsPt(window.innerWidth * (0.1 + Math.random() * 0.8), window.innerHeight * (0.4 + Math.random() * 0.45), 0.6 + Math.random() * 0.5);
+      }, 420);
+
+      const simsClickHandler = e => {
+        for (let i = 0; i < 12; i++) {
+          const ang = (i / 12) * Math.PI * 2;
+          const r = 20 + Math.random() * 50;
+          spawnSimsPt(e.clientX + Math.cos(ang) * r, e.clientY + Math.sin(ang) * r, 0.5 + Math.random() * 0.7);
+        }
+      };
+      document.addEventListener("click", simsClickHandler);
+
+      let simsMouseX = null;
+      let simsMouseY = null;
+
+      document.addEventListener("mousemove", e => {
+        simsMouseX = e.clientX;
+        simsMouseY = e.clientY;
+
+        cursorSvg.style.left = simsMouseX + "px";
+        cursorSvg.style.top = simsMouseY + "px";
+        cursorSvg.style.visibility = "visible";
+
+        halo1.style.left = simsMouseX + "px";
+        halo1.style.top = simsMouseY + "px";
+        halo2.style.left = simsMouseX + "px";
+        halo2.style.top = simsMouseY + "px";
+      });
+    }
   }
 });

@@ -240,3 +240,46 @@ body.blue-orbs-cursor {
   0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); }
 }
+
+/* The Sims Cursor (Based on codepen.io/Margarita-the-solid/pen/LERbOMR) */
+body.the-sims-cursor {
+  cursor: none;
+}
+
+#the-sims-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 20px;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+}
+
+.sims-pt {
+  position: fixed;
+  pointer-events: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  opacity: 0;
+  z-index: 9998;
+  animation: simsPtUp var(--d, 1.3s) ease-out var(--dl, 0s) forwards;
+}
+
+@keyframes simsPtUp {
+  0%   { opacity: 0.8; transform: translateY(0) scale(1); }
+  100% { opacity: 0;   transform: translateY(-100px) scale(0.1); }
+}
+
+.sims-halo {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: simsHalo 2.6s ease-in-out infinite;
+}
+
+@keyframes simsHalo {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  50%       { opacity: 0.1; transform: translate(-50%, -50%) scale(1.12); }
+}
