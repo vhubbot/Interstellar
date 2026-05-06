@@ -580,14 +580,30 @@ document.addEventListener("DOMContentLoaded", () => {
       function initRedCircle() {
         gsap.registerPlugin(MorphSVGPlugin);
 
-        const xTo = gsap.quickTo(cursorEl, "x", { duration: 0.2, ease: "power3" });
-        const yTo = gsap.quickTo(cursorEl, "y", { duration: 0.2, ease: "power3" });
+        let rcTargetX = null,
+          rcTargetY = null;
+        let rcCurX = 0,
+          rcCurY = 0;
 
         window.addEventListener("mousemove", e => {
+          if (rcTargetX === null) {
+            rcCurX = e.clientX;
+            rcCurY = e.clientY;
+          }
+          rcTargetX = e.clientX;
+          rcTargetY = e.clientY;
           cursorEl.style.visibility = "visible";
-          xTo(e.clientX);
-          yTo(e.clientY);
         });
+
+        (function rcFollow() {
+          if (rcTargetX !== null) {
+            rcCurX += (rcTargetX - rcCurX) * 0.18;
+            rcCurY += (rcTargetY - rcCurY) * 0.18;
+            cursorEl.style.left = rcCurX + "px";
+            cursorEl.style.top = rcCurY + "px";
+          }
+          requestAnimationFrame(rcFollow);
+        })();
 
         const cursorTl = gsap.timeline({ paused: true });
         cursorTl.to("#rc-cursorDot", {
