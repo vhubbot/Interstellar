@@ -25,12 +25,12 @@ function setupIframeTracking(moveCallback, hideCallback) {
 
   document.querySelectorAll("iframe").forEach(attachToIframe);
   new MutationObserver(mutations => {
-    mutations.forEach(m =>
+    mutations.forEach(m => {
       m.addedNodes.forEach(n => {
         if (n.tagName === "IFRAME") attachToIframe(n);
         else if (n.querySelectorAll) n.querySelectorAll("iframe").forEach(attachToIframe);
-      }),
-    );
+      });
+    });
   }).observe(document.body, { childList: true, subtree: true });
 }
 
@@ -74,7 +74,7 @@ function initRainbowStars() {
       this.speedY = Math.random() * bSpeed - bSpeed / 2;
       this.points = Math.floor(Math.random() * bStarVar) + 5;
       this.radius = Math.random() * bSize + 0.1;
-      this.color = "hsl(" + bHue * hue + ", 100%, 50%)";
+      this.color = `hsl(${bHue * hue}, 100%, 50%)`;
     }
     draw() {
       ctx.fillStyle = this.color;
@@ -145,7 +145,7 @@ function initWhiteOrbs() {
   const canvas = createFullscreenCanvas("pointer-canvas");
   const ctx = canvas.getContext("2d");
   const mouse = { x: innerWidth / 2, y: innerHeight / 2 };
-  let particles = [];
+  const particles = [];
 
   class OrbParticle {
     constructor(x, y) {
@@ -291,8 +291,8 @@ function initRainbowTrail() {
   function showAt(x, y) {
     mx = x;
     my = y;
-    cursorDot.style.left = x + "px";
-    cursorDot.style.top = y + "px";
+    cursorDot.style.left = `${x}px`;
+    cursorDot.style.top = `${y}px`;
     cursorDot.style.visibility = "visible";
   }
 
@@ -304,8 +304,12 @@ function initRainbowTrail() {
 
   window.addEventListener("mousemove", e => showAt(e.clientX, e.clientY));
   document.addEventListener("mouseleave", hide);
-  window.addEventListener("mousedown", () => (clicking = true));
-  window.addEventListener("mouseup", () => (clicking = false));
+  window.addEventListener("mousedown", () => {
+    clicking = true;
+  });
+  window.addEventListener("mouseup", () => {
+    clicking = false;
+  });
   setupIframeTracking(showAt, hide);
 
   (function loop() {
@@ -482,8 +486,8 @@ function initRedCircle() {
       if (rcTargetX !== null) {
         rcCurX += (rcTargetX - rcCurX) * 0.18;
         rcCurY += (rcTargetY - rcCurY) * 0.18;
-        cursorEl.style.left = rcCurX + "px";
-        cursorEl.style.top = rcCurY + "px";
+        cursorEl.style.left = `${rcCurX}px`;
+        cursorEl.style.top = `${rcCurY}px`;
       }
       requestAnimationFrame(rcFollow);
     })();
@@ -654,12 +658,12 @@ function initTheSims() {
     const el = document.createElement("div");
     el.className = "sims-pt";
     el.textContent = Math.random() < 0.7 ? "§" : "✦";
-    el.style.left = x + "px";
-    el.style.top = y + "px";
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
     el.style.color = COLS[Math.floor(Math.random() * COLS.length)];
-    el.style.fontSize = size + "rem";
+    el.style.fontSize = `${size}rem`;
     const d = 0.8 + Math.random() * 1.2;
-    el.style.setProperty("--d", d + "s");
+    el.style.setProperty("--d", `${d}s`);
     document.body.appendChild(el);
     setTimeout(() => el.remove(), (d + 0.2) * 1000);
   }
@@ -685,14 +689,14 @@ function initTheSims() {
   function showAt(x, y) {
     simsMouseX = x;
     simsMouseY = y;
-    cursorSvg.style.left = x + "px";
-    cursorSvg.style.top = y + "px";
+    cursorSvg.style.left = `${x}px`;
+    cursorSvg.style.top = `${y}px`;
     cursorSvg.style.visibility = "visible";
-    halo1.style.left = x + "px";
-    halo1.style.top = y + "px";
+    halo1.style.left = `${x}px`;
+    halo1.style.top = `${y}px`;
     halo1.style.visibility = "visible";
-    halo2.style.left = x + "px";
-    halo2.style.top = y + "px";
+    halo2.style.left = `${x}px`;
+    halo2.style.top = `${y}px`;
     halo2.style.visibility = "visible";
   }
 
@@ -714,7 +718,7 @@ function initTheSims() {
 }
 
 // Based on codepen.io/Jiironimo/pen/vEXbVNP
-function initBlueOrbsDom() {
+function _initBlueOrbsDom() {
   if (document.getElementById("blue-orbs-glow")) return;
   initBlueOrbs();
 }
@@ -757,7 +761,7 @@ function initSnakeTrail() {
     pointer.y = null;
   });
 
-  function update(t) {
+  function update(_t) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (pointer.x === null) {
       requestAnimationFrame(update);
@@ -796,7 +800,7 @@ function initSnakeTrail() {
   requestAnimationFrame(update);
 }
 
-function initCursorEffect() {
+function _initCursorEffect() {
   const pointer = localStorage.getItem("pointer");
   switch (pointer) {
     case "rainbow-stars":

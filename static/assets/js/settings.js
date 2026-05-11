@@ -19,15 +19,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const eventKeyInput = document.getElementById("eventKeyInput");
   const linkInput = document.getElementById("linkInput");
 
-  let eventKey = JSON.parse(localStorage.getItem("eventKey")) || ["`"];
-  let eventKeyRaw = localStorage.getItem("eventKeyRaw") || "`";
+  let _eventKey = JSON.parse(localStorage.getItem("eventKey")) || ["`"];
+  const eventKeyRaw = localStorage.getItem("eventKeyRaw") || "`";
   let pLink = localStorage.getItem("pLink") || "https://classroom.google.com/";
 
   eventKeyInput.value = eventKeyRaw;
   linkInput.value = pLink;
 
   eventKeyInput.addEventListener("input", () => {
-    eventKey = eventKeyInput.value.split(",");
+    _eventKey = eventKeyInput.value.split(",");
   });
   linkInput.addEventListener("input", () => {
     pLink = linkInput.value;
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (savedEngineName) document.getElementById("engine").value = savedEngineName;
 });
 
-function saveEventKey() {
+function _saveEventKey() {
   const eventKeyInput = document.getElementById("eventKeyInput");
   const linkInput = document.getElementById("linkInput");
   const eventKey = eventKeyInput.value.split(",");
@@ -260,7 +260,7 @@ function redirectToMainDomain() {
   }
 }
 
-const themeMap = {
+const _themeMap = {
   catppuccinMocha: "/assets/css/themes/catppuccin/mocha.css",
   catppuccinMacchiato: "/assets/css/themes/catppuccin/macchiato.css",
   catppuccinFrappe: "/assets/css/themes/catppuccin/frappe.css",
@@ -279,7 +279,7 @@ function themeChange(selectElement) {
   window.location.reload();
 }
 
-function AB() {
+function _AB() {
   let inFrame;
   try {
     inFrame = window !== top;
@@ -337,7 +337,7 @@ function AB() {
   location.replace(panicLink);
 }
 
-function toggleAB() {
+function _toggleAB() {
   const ab = localStorage.getItem("ab");
   localStorage.setItem("ab", ab === "true" ? "false" : "true");
 }
@@ -367,7 +367,7 @@ function saveCustomEngine() {
   }
 }
 
-function exportSaveData() {
+function _exportSaveData() {
   const cookies = Object.fromEntries(
     document.cookie
       .split("; ")
@@ -392,7 +392,7 @@ function exportSaveData() {
   URL.revokeObjectURL(url);
 }
 
-function importSaveData() {
+function _importSaveData() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "application/json";
@@ -405,6 +405,7 @@ function importSaveData() {
         const data = JSON.parse(e.target.result);
         if (data.cookies) {
           Object.entries(data.cookies).forEach(([key, value]) => {
+            // biome-ignore lint/suspicious/noDocumentCookie: legacy cookie restore; CookieStore API lacks broad enough support for this use case
             document.cookie = `${key}=${value}; path=/`;
           });
         }

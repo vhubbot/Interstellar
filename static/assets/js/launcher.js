@@ -132,7 +132,7 @@ function savePinnedApps(pins) {
 }
 
 function togglePin(appIndex) {
-  let pins = getPinnedApps();
+  const pins = getPinnedApps();
 
   const pinIndex = pins.indexOf(appIndex);
   const isCurrentlyPinned = pinIndex !== -1;

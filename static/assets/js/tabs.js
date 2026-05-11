@@ -74,17 +74,17 @@ function updateAddressBar() {
   }
 }
 
-function reload() {
+function _reload() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (activeIframe) {
-    activeIframe.src = activeIframe.src;
+    activeIframe.contentWindow.location.reload();
     updateAddressBar();
   } else {
     console.error("No active iframe found");
   }
 }
 
-function popoutTab() {
+function _popoutTab() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (!activeIframe) {
     console.error("No active iframe found");
@@ -115,7 +115,7 @@ function popoutTab() {
   newWindow.document.body.appendChild(newIframe);
 }
 
-function toggleDevTools() {
+function _toggleDevTools() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (!activeIframe) {
     console.error("No active iframe found");
@@ -174,7 +174,7 @@ function goHome() {
   window.location.href = "./";
 }
 
-function goBack() {
+function _goBack() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (activeIframe) {
     activeIframe.contentWindow.history.back();
@@ -184,7 +184,7 @@ function goBack() {
   }
 }
 
-function goForward() {
+function _goForward() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (activeIframe) {
     activeIframe.contentWindow.history.forward();
