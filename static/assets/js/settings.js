@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const eventKeyInput = document.getElementById("eventKeyInput");
   const linkInput = document.getElementById("linkInput");
 
-  let _eventKey = JSON.parse(localStorage.getItem("eventKey")) || ["`"];
+  let eventKey = JSON.parse(localStorage.getItem("eventKey")) || ["`"];
   const eventKeyRaw = localStorage.getItem("eventKeyRaw") || "`";
   let pLink = localStorage.getItem("pLink") || "https://classroom.google.com/";
 
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   linkInput.value = pLink;
 
   eventKeyInput.addEventListener("input", () => {
-    _eventKey = eventKeyInput.value.split(",");
+    eventKey = eventKeyInput.value.split(",");
   });
   linkInput.addEventListener("input", () => {
     pLink = linkInput.value;
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (savedEngineName) document.getElementById("engine").value = savedEngineName;
 });
 
-function _saveEventKey() {
+function saveEventKey() {
   const eventKeyInput = document.getElementById("eventKeyInput");
   const linkInput = document.getElementById("linkInput");
   const eventKey = eventKeyInput.value.split(",");
@@ -260,7 +260,7 @@ function redirectToMainDomain() {
   }
 }
 
-const _themeMap = {
+const themeMap = {
   catppuccinMocha: "/assets/css/themes/catppuccin/mocha.css",
   catppuccinMacchiato: "/assets/css/themes/catppuccin/macchiato.css",
   catppuccinFrappe: "/assets/css/themes/catppuccin/frappe.css",
@@ -279,7 +279,7 @@ function themeChange(selectElement) {
   window.location.reload();
 }
 
-function _AB() {
+function AB() {
   let inFrame;
   try {
     inFrame = window !== top;
@@ -337,7 +337,7 @@ function _AB() {
   location.replace(panicLink);
 }
 
-function _toggleAB() {
+function toggleAB() {
   const ab = localStorage.getItem("ab");
   localStorage.setItem("ab", ab === "true" ? "false" : "true");
 }
@@ -367,7 +367,7 @@ function saveCustomEngine() {
   }
 }
 
-function _exportSaveData() {
+function exportSaveData() {
   const cookies = Object.fromEntries(
     document.cookie
       .split("; ")
@@ -392,7 +392,7 @@ function _exportSaveData() {
   URL.revokeObjectURL(url);
 }
 
-function _importSaveData() {
+function importSaveData() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "application/json";

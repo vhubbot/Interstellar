@@ -718,7 +718,7 @@ function initTheSims() {
 }
 
 // Based on codepen.io/Jiironimo/pen/vEXbVNP
-function _initBlueOrbsDom() {
+function initBlueOrbsDom() {
   if (document.getElementById("blue-orbs-glow")) return;
   initBlueOrbs();
 }
@@ -761,7 +761,7 @@ function initSnakeTrail() {
     pointer.y = null;
   });
 
-  function update(_t) {
+  function update(t) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (pointer.x === null) {
       requestAnimationFrame(update);
@@ -800,7 +800,7 @@ function initSnakeTrail() {
   requestAnimationFrame(update);
 }
 
-function _initCursorEffect() {
+function initCursorEffect() {
   const pointer = localStorage.getItem("pointer");
   switch (pointer) {
     case "rainbow-stars":

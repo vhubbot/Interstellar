@@ -74,7 +74,7 @@ function updateAddressBar() {
   }
 }
 
-function _reload() {
+function reload() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (activeIframe) {
     activeIframe.contentWindow.location.reload();
@@ -84,7 +84,7 @@ function _reload() {
   }
 }
 
-function _popoutTab() {
+function popoutTab() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (!activeIframe) {
     console.error("No active iframe found");
@@ -115,7 +115,7 @@ function _popoutTab() {
   newWindow.document.body.appendChild(newIframe);
 }
 
-function _toggleDevTools() {
+function toggleDevTools() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (!activeIframe) {
     console.error("No active iframe found");
@@ -174,7 +174,7 @@ function goHome() {
   window.location.href = "./";
 }
 
-function _goBack() {
+function goBack() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (activeIframe) {
     activeIframe.contentWindow.history.back();
@@ -184,7 +184,7 @@ function _goBack() {
   }
 }
 
-function _goForward() {
+function goForward() {
   const activeIframe = document.querySelector("#frame-container iframe.active");
   if (activeIframe) {
     activeIframe.contentWindow.history.forward();
