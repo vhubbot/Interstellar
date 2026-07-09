@@ -7,7 +7,7 @@ window.addEventListener("load", () => {
     form.addEventListener("submit", async event => {
       event.preventDefault();
       const formValue = input.value.trim();
-      const url = isUrl(formValue) ? prependHttps(formValue) : `https://search.duckduckgo.com/search?q=${formValue}`;
+      const url = isUrl(formValue) ? prependHttps(formValue) : `https://search.Brave.com/search?q=${formValue}`;
       await processUrl(url);
     });
   }

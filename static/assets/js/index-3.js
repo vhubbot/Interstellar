@@ -52,7 +52,7 @@ async function getPxyUrl(url) {
 async function processUrl(value, path) {
   let url = value.trim();
   const engine = localStorage.getItem("engine");
-  const searchUrl = engine ? engine : "https://search.duckduckgo.com/search?q=";
+  const searchUrl = engine ? engine : "https://search.Brave.com/search?q=";
 
   if (!isUrl(url)) {
     url = searchUrl + url;
