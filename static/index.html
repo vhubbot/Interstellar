@@ -7,13 +7,103 @@
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="shortcut icon" id="tab-favicon" href="favicon.png" />
-  <title id="t">Home</title>
+  <title id="t">SoulyProxy</title>
   <link rel="stylesheet" href="/assets/css/global.css?v=6" />
   <link rel="stylesheet" href="/assets/css/h.css?v=01" />
   <link rel="stylesheet" href="/assets/css/nav.css?v=01" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6840529569014734"
     crossorigin="anonymous"></script>
+  <style>
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    @keyframes glow {
+
+      0%,
+      100% {
+        text-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
+      }
+
+      50% {
+        text-shadow: 0 0 20px rgba(100, 200, 255, 0.8), 0 0 30px rgba(100, 200, 255, 0.5);
+      }
+    }
+
+    .title {
+      animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
+    }
+
+    .search-container {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #fv {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      gap: 10px;
+    }
+
+    #input {
+      flex: 1;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 2px solid rgba(100, 200, 255, 0.3);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(100, 200, 255, 0.1);
+    }
+
+    #input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    #input:focus {
+      border-color: rgba(100, 200, 255, 0.8);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(100, 200, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .search-btn {
+      padding: 16px 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(100, 200, 255, 0.2);
+      white-space: nowrap;
+    }
+
+    .search-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(100, 200, 255, 0.4);
+    }
+
+    .search-btn:active {
+      transform: translateY(0px);
+    }
+  </style>
 </head>
 
 <body class="center" onload="SplashT">
@@ -21,11 +111,12 @@
   <div id="particles-js">
     <script rel="preload" src="https://cdn.jsdelivr.net/particles.js/2.0.0/"></script>
     <div class="main">
-      <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
+      <h1 class="title">SoulyProxy</h1>
       <p id="splash"></p>
       <div class="search-container">
         <form id="fv" method="POST">
-          <input id="input" class="truncate" placeholder="Search or enter an URL nga" type="text" />
+          <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
+          <button type="submit" class="search-btn"><i class="fas fa-search"></i> Search</button>
         </form>
       </div>
     </div>
