@@ -9,18 +9,12 @@
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
   <title>SoulyProxy</title>
-
   <link rel="shortcut icon" href="favicon.png">
-
   <link rel="stylesheet" href="/assets/css/global.css?v=6">
   <link rel="stylesheet" href="/assets/css/h.css?v=01">
   <link rel="stylesheet" href="/assets/css/nav.css?v=01">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6840529569014734"
-    crossorigin="anonymous"></script>
 
 
   <style>
@@ -44,7 +38,19 @@
 
     body {
 
-      background: #000;
+      background:
+        linear-gradient(rgba(0, 0, 0, .75),
+          rgba(0, 0, 0, .85)),
+        url("/static/assets/media/background/backgroundlogo.png");
+
+      background-size: cover;
+
+      background-position: center;
+
+      background-repeat: no-repeat;
+
+      background-attachment: fixed;
+
 
       color: white;
 
@@ -56,44 +62,7 @@
 
 
 
-    /* background */
-
-
-    body::before {
-
-      content: "";
-
-      position: fixed;
-
-      inset: -50%;
-
-
-      background:
-
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .15), transparent 25%),
-
-        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, .1), transparent 25%);
-
-
-      animation: bg 15s infinite alternate;
-
-
-    }
-
-
-    @keyframes bg {
-
-      from {
-        transform: scale(1);
-      }
-
-      to {
-        transform: scale(1.3);
-      }
-
-    }
-
-
+    /* Particles behind everything */
 
     #particles-js {
 
@@ -101,23 +70,23 @@
 
       inset: 0;
 
-      z-index: 1;
+      z-index: 0;
+
+      pointer-events: none;
 
     }
 
 
 
+    /* Main content */
 
     .main {
 
-
       position: relative;
 
-      z-index: 2;
-
+      z-index: 5;
 
       height: 100vh;
-
 
       display: flex;
 
@@ -127,41 +96,28 @@
 
       align-items: center;
 
-
       padding: 20px;
 
-
     }
-
 
 
     /* Logo */
 
-
     .title {
-
 
       font-size: clamp(45px, 9vw, 90px);
 
-
       font-weight: 800;
-
 
       letter-spacing: -5px;
 
-
       margin: 0;
 
-
       animation:
-
         floating 4s ease-in-out infinite,
-
         shine 3s infinite;
 
-
     }
-
 
 
     @keyframes floating {
@@ -173,50 +129,35 @@
 
       }
 
-
       50% {
 
         transform: translateY(-15px);
 
       }
 
-
     }
 
 
-
     @keyframes shine {
-
 
       0%,
       100% {
 
         text-shadow:
-
           0 0 15px rgba(255, 255, 255, .2);
 
       }
 
 
-
       50% {
 
-
         text-shadow:
-
           0 0 40px white,
-
           0 0 90px rgba(255, 255, 255, .5);
-
 
       }
 
-
     }
-
-
-
-    /* subtitle */
 
 
     #splash {
@@ -231,25 +172,17 @@
 
     }
 
-
-
     /* Search */
-
 
     .search-container {
 
-
       width: 100%;
-
 
       display: flex;
 
-
       justify-content: center;
 
-
       margin-top: 40px;
-
 
     }
 
@@ -257,18 +190,13 @@
 
     #fv {
 
-
       width: min(700px, 95%);
-
 
       display: flex;
 
-
       gap: 12px;
 
-
       padding: 12px;
-
 
 
       background:
@@ -276,73 +204,54 @@
         rgba(255, 255, 255, .06);
 
 
-
       border:
 
         1px solid rgba(255, 255, 255, .15);
 
 
-
       border-radius: 50px;
 
 
-
       backdrop-filter: blur(25px);
-
 
 
       box-shadow:
 
         0 20px 60px rgba(0, 0, 0, .8);
 
-
-
     }
 
 
 
-    /* input */
-
 
     #input {
 
-
       flex: 1;
-
 
       height: 58px;
 
-
       padding: 0 25px;
-
 
 
       background: #111;
 
 
-
       color: white;
-
 
 
       font-size: 16px;
 
 
-
       border-radius: 50px;
-
 
 
       border: 1px solid #333;
 
 
-
       outline: none;
 
 
-
       transition: .35s;
-
 
     }
 
@@ -366,12 +275,10 @@
 
     #input:focus {
 
-
       background: #181818;
 
 
       border-color: white;
-
 
 
       box-shadow:
@@ -379,9 +286,7 @@
         0 0 25px rgba(255, 255, 255, .2);
 
 
-
       transform: translateY(-3px);
-
 
     }
 
@@ -393,12 +298,10 @@
 
     .search-btn {
 
-
       height: 58px;
 
 
       padding: 0 35px;
-
 
 
       border: none;
@@ -407,13 +310,10 @@
       border-radius: 50px;
 
 
-
       background: white;
 
 
-
       color: black;
-
 
 
       font-size: 16px;
@@ -422,9 +322,7 @@
       font-weight: 800;
 
 
-
       cursor: pointer;
-
 
 
       display: flex;
@@ -436,9 +334,7 @@
       gap: 8px;
 
 
-
       transition: .3s;
-
 
     }
 
@@ -457,8 +353,6 @@
 
         0 15px 40px rgba(255, 255, 255, .35);
 
-
-
     }
 
 
@@ -471,10 +365,7 @@
 
 
 
-
-
-    /* phones */
-
+    /* Mobile */
 
     @media(max-width:600px) {
 
@@ -497,16 +388,13 @@
 
         border-radius: 30px;
 
-
       }
 
 
 
       #input {
 
-
         width: 100%;
-
 
       }
 
@@ -514,15 +402,11 @@
 
       .search-btn {
 
-
         width: 100%;
-
 
         justify-content: center;
 
-
       }
-
 
 
     }
@@ -533,73 +417,64 @@
 
 
 
-<body class="center" onload="SplashT()">
+<body onload="SplashT()">
 
+
+
+  <div id="particles-js"></div>
 
 
   <div class="f-nav"></div>
 
 
 
-  <div id="particles-js">
+  <div class="main">
 
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <h1 class="title">
 
+      SoulyProxy
 
-
-    <div class="main">
-
-
-      <h1 class="title">
-
-        SoulyProxy
-
-      </h1>
+    </h1>
 
 
 
-      <p id="splash"></p>
+    <p id="splash"></p>
 
 
 
-      <div class="search-container">
+    <div class="search-container">
 
 
-        <form id="fv" method="POST">
+      <form id="fv" method="POST">
 
 
-          <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
-
-
-
-          <button class="search-btn" type="submit">
-
-
-            <i class="fas fa-arrow-right"></i>
-
-            Launch
-
-
-          </button>
-
-
-        </form>
+        <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
 
 
 
-      </div>
+        <button class="search-btn" type="submit">
 
+
+          <i class="fas fa-arrow-right"></i>
+
+
+          Launch
+
+
+        </button>
+
+
+
+      </form>
 
 
     </div>
 
 
-
   </div>
 
-
-
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
 
   <script src="/assets/js/mg-pxy.js"></script>
@@ -620,6 +495,7 @@
 
 
 
+  <!-- Google Analytics -->
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKJQ5QHQTJ"></script>
 
@@ -638,6 +514,7 @@
     gtag("js", new Date());
 
     gtag("config", "G-WKJQ5QHQTJ");
+
 
   </script>
 
