@@ -2,20 +2,22 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="referrer" content="no-referrer" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="shortcut icon" href="favicon.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
-  <title id="t">SoulyProxy</title>
+  <title>SoulyProxy</title>
 
-  <link rel="stylesheet" href="/assets/css/global.css?v=6" />
-  <link rel="stylesheet" href="/assets/css/h.css?v=01" />
-  <link rel="stylesheet" href="/assets/css/nav.css?v=01" />
+  <link rel="shortcut icon" href="favicon.png">
+
+  <link rel="stylesheet" href="/assets/css/global.css?v=6">
+  <link rel="stylesheet" href="/assets/css/h.css?v=01">
+  <link rel="stylesheet" href="/assets/css/nav.css?v=01">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6840529569014734"
     crossorigin="anonymous"></script>
@@ -30,33 +32,56 @@
     }
 
 
+    html,
     body {
+
+      width: 100%;
+      height: 100%;
       margin: 0;
-      background: #000;
-      color: white;
-      font-family: Inter, Arial, sans-serif;
-      overflow: hidden;
+
     }
 
 
-    /* Animated background */
+    body {
 
-    body:before {
+      background: #000;
+
+      color: white;
+
+      font-family: Inter, Arial, sans-serif;
+
+      overflow: hidden;
+
+    }
+
+
+
+    /* background */
+
+
+    body::before {
 
       content: "";
+
       position: fixed;
+
       inset: -50%;
 
-      background:
-        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, .12), transparent 25%),
-        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, .08), transparent 25%);
 
-      animation: bgMove 12s infinite alternate;
+      background:
+
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .15), transparent 25%),
+
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, .1), transparent 25%);
+
+
+      animation: bg 15s infinite alternate;
+
 
     }
 
 
-    @keyframes bgMove {
+    @keyframes bg {
 
       from {
         transform: scale(1);
@@ -69,31 +94,42 @@
     }
 
 
-    /* particles */
 
     #particles-js {
 
       position: fixed;
+
       inset: 0;
+
       z-index: 1;
 
     }
 
 
-    /* Main */
+
 
     .main {
 
+
       position: relative;
+
       z-index: 2;
+
 
       height: 100vh;
 
+
       display: flex;
+
       flex-direction: column;
 
       justify-content: center;
+
       align-items: center;
+
+
+      padding: 20px;
+
 
     }
 
@@ -104,70 +140,94 @@
 
     .title {
 
-      font-size: 90px;
+
+      font-size: clamp(45px, 9vw, 90px);
+
 
       font-weight: 800;
 
+
       letter-spacing: -5px;
+
 
       margin: 0;
 
 
       animation:
-        float 4s infinite ease-in-out,
-        glow 3s infinite;
+
+        floating 4s ease-in-out infinite,
+
+        shine 3s infinite;
 
 
     }
 
 
-    @keyframes float {
+
+    @keyframes floating {
 
       0%,
       100% {
+
         transform: translateY(0);
+
       }
 
+
       50% {
-        transform: translateY(-18px);
+
+        transform: translateY(-15px);
+
       }
+
 
     }
 
 
-    @keyframes glow {
+
+    @keyframes shine {
+
 
       0%,
       100% {
 
         text-shadow:
+
           0 0 15px rgba(255, 255, 255, .2);
 
       }
 
 
+
       50% {
 
+
         text-shadow:
+
           0 0 40px white,
-          0 0 80px rgba(255, 255, 255, .4);
+
+          0 0 90px rgba(255, 255, 255, .5);
+
 
       }
+
 
     }
 
 
 
-    /* Subtitle */
+    /* subtitle */
 
 
     #splash {
 
       color: #aaa;
 
-      font-size: 18px;
+      font-size: 16px;
 
-      margin-top: -15px;
+      margin-top: 10px;
+
+      text-align: center;
 
     }
 
@@ -178,60 +238,111 @@
 
     .search-container {
 
-      margin-top: 50px;
+
+      width: 100%;
+
+
+      display: flex;
+
+
+      justify-content: center;
+
+
+      margin-top: 40px;
+
 
     }
+
 
 
     #fv {
 
+
+      width: min(700px, 95%);
+
+
       display: flex;
 
-      gap: 15px;
 
-      padding: 15px;
+      gap: 12px;
 
-      background: rgba(255, 255, 255, .05);
 
-      border: 1px solid rgba(255, 255, 255, .12);
+      padding: 12px;
 
-      border-radius: 40px;
 
-      backdrop-filter: blur(20px);
+
+      background:
+
+        rgba(255, 255, 255, .06);
+
+
+
+      border:
+
+        1px solid rgba(255, 255, 255, .15);
+
+
+
+      border-radius: 50px;
+
+
+
+      backdrop-filter: blur(25px);
+
 
 
       box-shadow:
-        0 20px 70px rgba(0, 0, 0, .8);
+
+        0 20px 60px rgba(0, 0, 0, .8);
+
+
 
     }
 
 
 
-    /* Input */
+    /* input */
 
 
     #input {
 
-      width: 450px;
 
-      padding: 18px 25px;
+      flex: 1;
 
-      font-size: 16px;
+
+      height: 58px;
+
+
+      padding: 0 25px;
+
 
 
       background: #111;
 
+
+
       color: white;
+
+
+
+      font-size: 16px;
+
 
 
       border-radius: 50px;
 
+
+
       border: 1px solid #333;
+
+
 
       outline: none;
 
 
-      transition: .3s;
+
+      transition: .35s;
+
 
     }
 
@@ -247,20 +358,33 @@
 
     #input:hover {
 
-      border-color: white;
+      border-color: #777;
 
     }
+
 
 
     #input:focus {
 
-      background: #171717;
+
+      background: #181818;
+
 
       border-color: white;
 
+
+
+      box-shadow:
+
+        0 0 25px rgba(255, 255, 255, .2);
+
+
+
       transform: translateY(-3px);
 
+
     }
+
 
 
 
@@ -269,24 +393,48 @@
 
     .search-btn {
 
-      padding: 18px 35px;
+
+      height: 58px;
+
+
+      padding: 0 35px;
+
+
 
       border: none;
+
 
       border-radius: 50px;
 
 
+
       background: white;
+
+
 
       color: black;
 
 
+
       font-size: 16px;
+
 
       font-weight: 800;
 
 
+
       cursor: pointer;
+
+
+
+      display: flex;
+
+
+      align-items: center;
+
+
+      gap: 8px;
+
 
 
       transition: .3s;
@@ -295,16 +443,24 @@
     }
 
 
+
     .search-btn:hover {
 
+
       transform:
+
         translateY(-5px) scale(1.05);
 
 
+
       box-shadow:
-        0 15px 40px rgba(255, 255, 255, .3);
+
+        0 15px 40px rgba(255, 255, 255, .35);
+
+
 
     }
+
 
 
     .search-btn:active {
@@ -315,39 +471,58 @@
 
 
 
-    /* Mobile */
 
-    @media(max-width:700px) {
+
+    /* phones */
+
+
+    @media(max-width:600px) {
 
 
       .title {
 
-        font-size: 55px;
+        font-size: 50px;
+
+        letter-spacing: -3px;
 
       }
+
 
 
       #fv {
 
         flex-direction: column;
 
-        width: 90vw;
+        width: 95%;
+
+        border-radius: 30px;
+
 
       }
+
 
 
       #input {
 
+
         width: 100%;
 
+
       }
+
 
 
       .search-btn {
 
+
         width: 100%;
 
+
+        justify-content: center;
+
+
       }
+
 
 
     }
@@ -361,7 +536,9 @@
 <body class="center" onload="SplashT()">
 
 
+
   <div class="f-nav"></div>
+
 
 
   <div id="particles-js">
@@ -370,12 +547,16 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
 
+
     <div class="main">
 
 
       <h1 class="title">
+
         SoulyProxy
+
       </h1>
+
 
 
       <p id="splash"></p>
@@ -392,11 +573,13 @@
 
 
 
-          <button type="submit" class="search-btn">
+          <button class="search-btn" type="submit">
+
 
             <i class="fas fa-arrow-right"></i>
 
             Launch
+
 
           </button>
 
@@ -404,13 +587,18 @@
         </form>
 
 
+
       </div>
+
 
 
     </div>
 
 
+
   </div>
+
+
 
 
 
@@ -429,6 +617,7 @@
   <script src="/assets/js/sj-tp.js?v=2025-04-15"></script>
 
   <script src="/assets/js/m1.js"></script>
+
 
 
 
